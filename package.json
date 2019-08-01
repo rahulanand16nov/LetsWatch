@@ -1,0 +1,33 @@
+{
+  "name": "letswatch",
+  "version": "1.0.0",
+  "description": "Watch Youtube videos together with peers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rahulanand16nov/LetsWatch.git"
+  },
+  "keywords": [
+    "Node",
+    "express",
+    "socket.io"
+  ],
+  "author": "Rahul",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rahulanand16nov/LetsWatch/issues"
+  },
+  "homepage": "https://github.com/rahulanand16nov/LetsWatch#readme",
+  "dependencies": {
+    "ejs": "^2.6.2",
+    "express": "^4.17.1",
+    "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}

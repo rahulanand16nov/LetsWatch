@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="../../favicon.ico">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!--Icons-->
+
+    <title>LetWatch</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/main.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          </button>
+          <a class="navbar-brand" href="#">LetWatch</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#wan">Home</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav><!--/.nav-collapse -->
+
+    <div class="container">
+      <div class="embed-responsive embed-responsive-16by9" style="margin-top: 20px">
+        <iframe class="embed-responsive-item" id="video" src="https://www.youtube.com/embed/pU8-7BX9uxs?enablejsapi=1" allowfullscreen></iframe>
+      </div> <!--Embeded Player-->
+      </div>
+
+      <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+
+// Inject YouTube API script
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    // global variable for the player
+var player;
+
+// this function gets called when API is ready to use
+function onYouTubeIframeAPIReady() {
+  // create the global player from the specific iframe (#player)
+  player = new YT.Player('video', {
+    events: {
+      // call this function when player is ready to use
+      'onStateChange': onPlayerStateChange,
+      'onReady': onPlayerReady
+    },
+    // player variables to have fun with
+    playerVars: {
+      'controls':0,
+      'disablekb':1,
+      'modestbranding':1,
+      'rel':0,
+      'showinfo':0
+    }
+  });
+}
+
+// Global variable for icon, play-stop button and socket
+var icon = document.getElementById("icon");
+var psButton = document.getElementById("ps-button");
+var socket = io();
+
+
+// this functions is called whenever there is a change in state like changing from playing to pause etc.
+function onPlayerStateChange(event){
+  var state = player.getPlayerState();
+  if(state === 1){
+    socket.emit('playing', player.getCurrentTime());
+  } else if (state === 2){
+    socket.emit('paused', player.getCurrentTime());
+  }
+}
+
+// triggered when a packed is recieved with tag 'pauseChange'
+socket.on('pauseChange', (time)=>{
+  player.pauseVideo();
+  player.seekTo(time,true);
+});
+
+// * with 'playChange
+socket.on('playChange', ()=>{
+  player.playVideo();
+});
+
+// called when player is ready
+ function onPlayerReady(event) {
+   socket.emit('ready');
+   socket.on('start',()=>{
+     player.playVideo();
+     player.seekTo(0,true);
+   });
+ } 
+    </script>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
