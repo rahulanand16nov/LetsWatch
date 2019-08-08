@@ -8,7 +8,11 @@ const io = require('socket.io')(http)
 app.use(express.static(path.join(__dirname, 'public')))
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
-app.get('/', (req, res) => res.render('index'))
+app.get('/', (req, res) => res.render('start'))
+app.get('/index', (req, res)=>{
+   // console.log(req.query.watch);
+    res.render('index');
+})
 
 http.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
