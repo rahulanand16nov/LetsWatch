@@ -1,12 +1,16 @@
 
 var url = new URL(window.location.href);
-var watchID = url.searchParams.get('watch');
+var roomID = url.searchParams.get('room');
+document.getElementById('header').innerText = ('Room ID: ' + roomID);
 
 /* window.onload = function(){
     document.getElementById('video').src="https://www.youtube.com/embed/"+watchID+"?enablejsapi=1";
     document.getElementById('video').style="visibility: visible";
 } */
 
+  window.onload = function(){
+    socket.emit('addUser', roomID);
+  }
 // Inject YouTube API script
 var tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
@@ -46,9 +50,9 @@ var socket = io();
 function onPlayerStateChange(event){
   var state = player.getPlayerState();
   if(state === 1){
-    socket.emit('playing', player.getCurrentTime());
+    socket.emit('playing', player.getCurrentTime(),roomID);
   } else if (state === 2){
-    socket.emit('paused', player.getCurrentTime());
+    socket.emit('paused', player.getCurrentTime(),roomID);
   }
 }
 
@@ -65,7 +69,7 @@ socket.on('playChange', ()=>{
 
 // called when player is ready
  function onPlayerReady(event) {
-   socket.emit('ready');
+   socket.emit('ready',roomID);
    socket.on('start',()=>{
      player.playVideo();
      player.seekTo(0,true);

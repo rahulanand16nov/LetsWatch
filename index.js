@@ -16,15 +16,28 @@ app.get('/index', (req, res)=>{
 
 http.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
+var rooms = new Map([["1" ,1]]);
+
+
 io.on('connection', function(socket){
-  socket.on('paused', (time) =>{
-    console.log('paused at: '+time);
-    io.emit('pauseChange', time);
+
+  socket.on('addUser',(roomID)=>{
+    if(!rooms.has(roomID)){
+      rooms[roomID] = 1;
+      console.log("ROOM CREATED: " + roomID);
+    } 
+    socket.join(roomID);
   })
-  socket.on('ready',()=>{
-    io.emit('start');
+
+  socket.on('paused', (time,roomID) =>{
+    console.log('Room ID: ' + roomID + ' paused at: '+time);
+    io.to(roomID).emit('pauseChange', time);
   })
-  socket.on('playing',()=>{
-    io.emit('playChange');
+  socket.on('ready',(roomID)=>{
+    io.to(roomID).emit('start');
+  })
+  socket.on('playing',(time,roomID)=>{
+    console.log('Room ID: ' + roomID + ' started playing at: '+ time);
+    io.to(roomID).emit('playChange');
   })
 });
