@@ -1,6 +1,8 @@
 # LetsWatch
 A barebones Node.js app created using [Express 4](http://expressjs.com/) & [Socket.io](http://socket.io/) to watch YouTube videos simultaneously.
 
+![Watching John Wick 3's Trailer with friends in sync](https://i.gyazo.com/251c75d65fe1760459912f8ea29c7eaf.png)
+
 ## Running Locally
 
 Make sure you have [Node.js](http://nodejs.org/) and the [Heroku CLI](https://cli.heroku.com/) installed.
