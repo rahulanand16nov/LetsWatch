@@ -24,7 +24,7 @@
   "homepage": "https://github.com/rahulanand16nov/LetsWatch#readme",
   "dependencies": {
     "ejs": "^2.6.2",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
